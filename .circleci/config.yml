@@ -68,7 +68,7 @@ workflows:
   build-deploy:
     jobs:
     - build
-    - Deploy to DEV ?
+    - Deploy to DEV ?:
         type: approval
         requires:
         - build
