@@ -6,6 +6,7 @@ version: 2.1
 
 orbs:
   heroku: circleci/heroku@0.0.10
+  docker: circleci/docker@0.5.20
 
 jobs:
   build:
@@ -63,8 +64,7 @@ jobs:
     - checkout
     - heroku/deploy-via-git
   deploy-with-container-registry:
-    docker:
-    - image: circleci/golang:1.13-alpine
+    executor: docker/docker
     steps:
     - checkout
     - heroku/install
