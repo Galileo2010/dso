@@ -64,7 +64,7 @@ jobs:
     - heroku/deploy-via-git
   deploy-with-container-registry:
     docker:
-    - image: buildpack-deps:trusty
+    - image: circleci/golang:1.13-alpine
     steps:
     - checkout
     - heroku/install
