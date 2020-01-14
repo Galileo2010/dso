@@ -56,8 +56,7 @@ jobs:
         path: test-reports
         destination: test-reports
   deploy:
-    docker:
-    - image: buildpack-deps:trusty
+    executor: heroku/default
     steps:
     - checkout
     - heroku/deploy-via-git
