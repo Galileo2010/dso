@@ -62,11 +62,11 @@ jobs:
     - heroku/deploy-via-git
   deploy-with-container-registry:
     executor: heroku/default
-      steps:
-      - checkout
-      - heroku container:login
-      - heroku container:push web -a dso-container-demo
-      - heroku container:release -a dso-container-demo web
+    steps:
+    - checkout
+    - heroku container:login
+    - heroku container:push web -a dso-container-demo
+    - heroku container:release -a dso-container-demo web
 
 workflows:
   version: 2
