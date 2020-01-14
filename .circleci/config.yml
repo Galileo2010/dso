@@ -68,6 +68,7 @@ jobs:
     steps:
     - checkout
     - heroku/install
+    - setup_remote_docker
     - run:
         name: login heroku container
         command: heroku container:login
