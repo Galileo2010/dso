@@ -3,8 +3,10 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2.1
+
 orbs:
   heroku: circleci/heroku@0.0.10
+
 jobs:
   build:
     docker:
@@ -65,9 +67,15 @@ jobs:
     steps:
     - checkout
     - heroku/install
-    - heroku container:login
-    - heroku container:push web -a dso-container-demo
-    - heroku container:release -a dso-container-demo web
+    - run:
+        name: login heroku container
+        command: heroku container:login
+    - run:
+        name: buid and push image
+        command: heroku container:push web -a dso-container-demo
+    - run:
+        name: deploy with image
+        command: heroku container:release -a dso-container-demo web
 
 workflows:
   version: 2
