@@ -63,7 +63,7 @@ jobs:
     steps:
     - checkout
     - heroku/deploy-via-git
-  deploy-with-container-registry:
+  deploy-with-image:
     executor: docker/docker
     steps:
     - checkout
@@ -94,7 +94,7 @@ workflows:
         filters:
           branches:
             only: master
-    - deploy-with-container-registry:
+    - deploy-with-image:
         requires:
         - Deploy to DEV ?
         filters:
