@@ -63,7 +63,8 @@ jobs:
     - checkout
     - heroku/deploy-via-git
   deploy-with-container-registry:
-    executor: heroku/default
+    docker:
+    - image: buildpack-deps:trusty
     steps:
     - checkout
     - heroku/install
