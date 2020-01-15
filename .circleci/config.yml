@@ -54,17 +54,23 @@ jobs:
         command: docker push registry.heroku.com/dso-container-demo/web
     - run:
         name: deploy with image
-        command: heroku container:release -a dso-demo web
-  deploy-QA:
-    executor: heroku/default
+        command: heroku container:release -a dso-container-demo web
+  deploy-PROD:
+    executor: docker/docker
     steps:
+    - setup_remote_docker
     - heroku/install
     - run:
         name: login heroku container
         command: heroku container:login
     - run:
+        name: docker tag & push image
+        command: |
+          docker tag registry.heroku.com/dso-container-demo/web registry.heroku.com/dso-demo/web
+          docker push registry.heroku.com/dso-demo/web
+    - run:
         name: deploy with image
-        command: heroku container:release -a dso-container-demo web
+        command: heroku container:release -a dso-demo web
 
 
 workflows:
@@ -78,13 +84,13 @@ workflows:
     - deploy-DEV:
         requires:
         - test-image
-    - Deploy to QA ?:
+    - Deploy to PROD ?:
         type: approval
         requires:
         - deploy-DEV
-    - deploy-QA:
+    - deploy-PROD:
         requires:
-        - Deploy to QA ?
+        - Deploy to PROD ?
         filters:
           branches:
             only: master
