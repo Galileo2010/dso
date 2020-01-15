@@ -24,6 +24,20 @@ jobs:
         root: .
         paths:
         - ./dso-image.tar
+  hawkeye-scan:
+    executor: docker/docker
+    steps:
+    - attach_workspace:
+        at: /tmp/workspace
+    - setup_remote_docker
+    - run:
+        name: load local image
+        command: docker load -i /tmp/workspace/dso-image.tar
+    - run:
+        name: hawkeye scan
+        command: |
+          docker run --name my-app registry.heroku.com/dso-container-demo/web:latest ls && docker cp my-app:/app .
+          docker run --rm -v ./app:/target hawkeyesec/scanner-cli:latest
   test-image:
     executor: docker/docker
     steps:
@@ -81,9 +95,12 @@ workflows:
   build-deploy:
     jobs:
     - build-image
-    - test-image:
+    - hawkeye-scan:
         requires:
         - build-image
+    - test-image:
+        requires:
+        - hawkeye-scan
     - deploy-DEV:
         requires:
         - test-image
