@@ -9,6 +9,28 @@ orbs:
   docker: circleci/docker@0.5.20
 
 jobs:
+  build-image:
+    executor: docker/docker
+    steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+        name: build docker image
+        command: docker build -t registry.heroku.com/dso-container-demo/web .
+    - run:
+        name: save docker image
+        command: docker save -o dso-image.tar
+    - persist_to_workspace:
+        root: .
+        paths:
+        - ./dso-image.tar
+    - run:
+        name: list all files
+        command: ls
+    - run:
+        name: print current workdir
+        command: pwd
+
   build:
     docker:
     # specify the version you desire here
@@ -83,7 +105,9 @@ workflows:
   version: 2
   build-deploy:
     jobs:
-    - build
+    - build:
+        requires:
+        - build-image
     - Deploy to DEV ?:
         type: approval
         requires:
