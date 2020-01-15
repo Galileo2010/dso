@@ -35,7 +35,11 @@ jobs:
         command: docker load -i /tmp/workspace/dso-image.tar
     - run:
         name: hawkeye scan
-        command: docker run --name my-app registry.heroku.com/dso-container-demo/web:latest ls && docker run --rm --volumes-from my-app hawkeyesec/scanner-cli:latest -t /app
+        command: |
+          docker run --name web-app registry.heroku.com/dso-container-demo/web:latest ls && docker cp web-app:/app .
+          docker create -v /application --name tmp-app alpine:3.4 /bin/true
+          docker cp app/. tmp-app:/application
+          docker run --rm --volumes-from tmp-app hawkeyesec/scanner-cli:latest -t /application
   test-image:
     executor: docker/docker
     steps:
