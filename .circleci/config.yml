@@ -47,11 +47,11 @@ jobs:
         name: load local image
         command: docker load -i /tmp/workspace/dso-image.tar
     - run:
-        name: docker push image
-        command: docker push registry.heroku.com/dso-container-demo/web
-    - run:
         name: login heroku container
         command: heroku container:login
+    - run:
+        name: docker push image
+        command: docker push registry.heroku.com/dso-container-demo/web
     - run:
         name: deploy with image
         command: heroku container:release -a dso-container-demo web
