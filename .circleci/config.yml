@@ -19,7 +19,7 @@ jobs:
         command: docker build -t registry.heroku.com/dso-container-demo/web .
     - run:
         name: save docker image
-        command: docker save -o dso-image.tar
+        command: docker save -o dso-image.tar registry.heroku.com/dso-container-demo/web:latest
     - persist_to_workspace:
         root: .
         paths:
