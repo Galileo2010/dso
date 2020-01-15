@@ -64,9 +64,12 @@ jobs:
         name: login heroku container
         command: heroku container:login
     - run:
+        name: pull heroku image
+        command: heroku container:pull web -a dso-container-demo
+    - run:
         name: docker tag & push image
         command: |
-          docker tag registry.heroku.com/dso-container-demo/web registry.heroku.com/dso-demo/web
+          docker tag registry.heroku.com/dso-container-demo/web:latest registry.heroku.com/dso-demo/web:latest
           docker push registry.heroku.com/dso-demo/web
     - run:
         name: deploy with image
