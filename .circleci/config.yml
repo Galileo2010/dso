@@ -24,13 +24,21 @@ jobs:
         root: .
         paths:
         - ./dso-image.tar
+  test-image:
+    executor: docker/docker
+    steps:
+    - attach_workspace:
+        at: /tmp/workspace
+    - setup_remote_docker
     - run:
-        name: list all files
+        name: list local image file
         command: ls
     - run:
-        name: print current workdir
-        command: pwd
-
+        name: load local image
+        command: docker load -i /tmp/workspace/dso-image.tar
+    - run:
+        name: run tests
+        command: docker run registry.heroku.com/dso-container-demo/web:latest python manage.py test
   build:
     docker:
     # specify the version you desire here
@@ -106,9 +114,12 @@ workflows:
   build-deploy:
     jobs:
     - build-image
-    - build:
+    - test-image:
         requires:
         - build-image
+    - build:
+        requires:
+        - test-image
     - Deploy to DEV ?:
         type: approval
         requires:
