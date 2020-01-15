@@ -37,7 +37,7 @@ jobs:
         name: hawkeye scan
         command: |
           docker run --name my-app registry.heroku.com/dso-container-demo/web:latest ls && docker cp my-app:/app .
-          docker run --rm -v ./app:/target hawkeyesec/scanner-cli:latest
+          docker run --rm -v $PWD/app:/target hawkeyesec/scanner-cli:latest
   test-image:
     executor: docker/docker
     steps:
