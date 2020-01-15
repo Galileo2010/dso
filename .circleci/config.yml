@@ -40,7 +40,8 @@ jobs:
           docker create -v /application --name tmp-app alpine:3.4 /bin/true
           docker cp app/. tmp-app:/application
           mkdir hawkeye-report
-          docker run --rm --volumes-from tmp-app hawkeyesec/scanner-cli:latest -t /application -e settings.py -j hawkeye-report/results.json
+          docker run --rm --volumes-from tmp-app hawkeyesec/scanner-cli:latest -t /application -e settings.py -j ./results.json
+          ls
     - store_test_results:
         path: hawkeye-report
   test-image:
