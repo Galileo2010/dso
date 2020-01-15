@@ -36,7 +36,7 @@ jobs:
     - run:
         name: run tests
         command: docker run registry.heroku.com/dso-container-demo/web:latest python manage.py test
-  deploy-image:
+  deploy-DEV:
     executor: docker/docker
     steps:
     - attach_workspace:
@@ -54,7 +54,18 @@ jobs:
         command: docker push registry.heroku.com/dso-container-demo/web
     - run:
         name: deploy with image
+        command: heroku container:release -a dso-demo web
+  deploy-QA:
+    executor: heroku/default
+    steps:
+    - heroku/install
+    - run:
+        name: login heroku container
+        command: heroku container:login
+    - run:
+        name: deploy with image
         command: heroku container:release -a dso-container-demo web
+
 
 workflows:
   version: 2
@@ -64,13 +75,16 @@ workflows:
     - test-image:
         requires:
         - build-image
-    - Deploy to DEV ?:
-        type: approval
+    - deploy-DEV:
         requires:
         - test-image
-    - deploy-image:
+    - Deploy to QA ?:
+        type: approval
         requires:
-        - Deploy to DEV ?
+        - deploy-DEV
+    - deploy-QA:
+        requires:
+        - Deploy to QA ?
         filters:
           branches:
             only: master
