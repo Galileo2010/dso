@@ -3,6 +3,7 @@ __pycache__
 env/
 .idea/
 .circleci/
+aquasec/
 .gitignore
 Procfile
 Readme.md
