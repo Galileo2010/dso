@@ -20,11 +20,12 @@ jobs:
     - run:
         name: aquasec scan
         command: |
-          mkdir aquasec-report
+          mkdir test-reports
+          mkdir test-reports/aquasec-report
           cd aquasec
-          MICROSCANNER_TOKEN=$MICROSCANNER_TOKEN ./grabhtml.sh registry.heroku.com/dso-container-demo/web > ../aquasec-report/reports.html
+          MICROSCANNER_TOKEN=$MICROSCANNER_TOKEN ./grabhtml.sh registry.heroku.com/dso-container-demo/web > ../test-reports/aquasec-report/reports.html
     - store_test_results:
-        path: aquasec-report
+        path: test-reports
     - run:
         name: save docker image
         command: docker save -o dso-image.tar registry.heroku.com/dso-container-demo/web:latest
