@@ -21,7 +21,8 @@ jobs:
         name: aquasec scan
         command: |
           mkdir aquasec-report
-          MICROSCANNER_TOKEN=$MICROSCANNER_TOKEN ./aquasec/grabhtml.sh registry.heroku.com/dso-container-demo/web > ./aquasec-report/reports.html
+          cd aquasec-report
+          MICROSCANNER_TOKEN=$MICROSCANNER_TOKEN ./grabhtml.sh registry.heroku.com/dso-container-demo/web > ../aquasec-report/reports.html
     - store_test_results:
         path: aquasec-report
     - run:
