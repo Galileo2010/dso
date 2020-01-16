@@ -1,0 +1,5 @@
+
+echo "do something before push"
+python manage.py test
+echo "run tests"
+exit 1
