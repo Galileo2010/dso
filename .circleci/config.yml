@@ -18,6 +18,13 @@ jobs:
         name: build docker image
         command: docker build -t registry.heroku.com/dso-container-demo/web .
     - run:
+        name: aquasec scan
+        command: |
+          mkdir aquasec-report
+          MICROSCANNER_TOKEN=$MICROSCANNER_TOKEN ./aquasec/grabhtml.sh registry.heroku.com/dso-container-demo/web > ./aquasec-report/reports.html
+    - store_test_results:
+        path: aquasec-report
+    - run:
         name: save docker image
         command: docker save -o dso-image.tar registry.heroku.com/dso-container-demo/web:latest
     - persist_to_workspace:
