@@ -14,6 +14,7 @@ git config git config core.hooksPath .githooks
 ```shell script
 gcloud app deploy
 ```
+`App Eigine Admin API` need to be active.
 
 ### circleci local
 ```shell script
