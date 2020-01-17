@@ -1,2 +1,4 @@
 echo "do something before push..."
 python3 manage.py test
+echo "circleci config validate..."
+circleci config validate

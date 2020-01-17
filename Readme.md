@@ -1,4 +1,4 @@
-### How to set up you app
+### Deploy to Heroku
 1. connect to this repo in circle ci
 2. add env `HEROKU_API_KEY` and `HEROKU_APP_NAME` for this project
 3. create project in heroku
@@ -8,4 +8,9 @@
 ### Config your git hooks
 ```shell script
 git config git config core.hooksPath .githooks
+```
+
+### Deploy to GCP
+```shell script
+gcloud app deploy
 ```
