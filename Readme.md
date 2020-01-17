@@ -14,3 +14,9 @@ git config git config core.hooksPath .githooks
 ```shell script
 gcloud app deploy
 ```
+
+### circleci local
+```shell script
+circleci config process .circleci/config.yml > process.yml
+circleci local execute -c process.yml --job gcp-cli/install_and_initialize_cli
+```

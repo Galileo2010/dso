@@ -7,15 +7,50 @@ version: 2.1
 orbs:
   heroku: circleci/heroku@0.0.10
   docker: circleci/docker@0.5.20
-  gcp-cli: circleci/gcp-cli@1.0.0
+  orb-tools: circleci/orb-tools@8.26.0
 
 jobs:
-  gcp-cli/install_and_initialize_cli:
-    executor: gcp-cli/default
+  deploy-to-gcp:
+    docker:
+    - image: circleci/python:2.7-stretch
     steps:
+    - run:
+        name: Install gcloud CLI if necessery
+        command: |
+          install () {
+            # Set sudo to work whether logged in as root user or non-root user
+            if [[ $EUID == 0 ]]; then export SUDO=""; else export SUDO="sudo"; fi
+            cd ~/
+            curl -s https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-268.0.0-linux-x86_64.tar.gz | tar xz
+            echo 'source ~/google-cloud-sdk/path.bash.inc' >> $BASH_ENV
+          }
+
+          if grep 'docker\|lxc' /proc/1/cgroup > /dev/null 2>&1; then
+            if [[ $(command -v gcloud) == "" ]]; then
+              install
+            else
+              echo "gcloud CLI is already installed."
+            fi
+          else
+            echo "----------------------------------------------------------------------------------------------------"
+            echo "this is a machine executor job, replacing default installation of gcloud CLI"
+            echo "----------------------------------------------------------------------------------------------------"
+            sudo rm -rf /opt/google-cloud-sdk
+            install
+          fi
+    - orb-tools/check-env-var-param:
+        command-name: Check required env vars
+        param: GCLOUD_SERVICE_KEY,GOOGLE_PROJECT_ID,GOOGLE_COMPUTE_ZONE
+    - run:
+        name: Initialize gcloud CLI
+        command: |
+          echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+          gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+          gcloud --quiet config set project $GOOGLE_PROJECT_ID
+          gcloud --quiet config set compute/zone $GOOGLE_COMPUTE_ZONE
     - checkout
     - run:
-        name: deploy gcloud
+        name: Deploy with gcloud CLI
         command: gcloud app deploy
   build-image:
     executor: docker/docker
@@ -113,13 +148,13 @@ jobs:
         command: heroku container:release -a dso-demo web
 
 workflows:
-  version: 2
-  install_and_configure_cli:
-    jobs:
-    - gcp-cli/install_and_initialize_cli
+  version: 2.1
   build-deploy:
     jobs:
-    - build-image
+    - deploy-to-gcp
+    - build-image:
+        requires:
+          - deploy-to-gcp
     - hawkeye-scan:
         requires:
         - build-image
