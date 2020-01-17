@@ -13,9 +13,10 @@ jobs:
   gcp-cli/install_and_initialize_cli:
     executor: gcp-cli/default
     steps:
+    - checkout
     - run:
-        name: test gcloud
-        command: gcloud app versions list
+        name: deploy gcloud
+        command: gcloud app deploy
   build-image:
     executor: docker/docker
     steps:
