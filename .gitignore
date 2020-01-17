@@ -116,3 +116,7 @@ GitHub.sublime-settings
 !.vscode/extensions.json
 .history
 /dso.iml
+
+/aquasec/.DS_Store
+/ds/.DS_Store
+

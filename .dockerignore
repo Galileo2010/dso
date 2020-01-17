@@ -3,6 +3,7 @@ __pycache__
 env/
 .idea/
 .circleci/
+.githooks/
 aquasec/
 .gitignore
 Procfile
