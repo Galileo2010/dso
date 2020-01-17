@@ -4,3 +4,8 @@
 3. create project in heroku
 4. run cmd `heroku config:set DISABLE_COLLECTSTATIC=1 -a dso-demo`
 5. run pipeline in circle ci
+
+### Config your git hooks
+```shell script
+git config git config core.hooksPath .githooks
+```
