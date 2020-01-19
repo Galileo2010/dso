@@ -17,3 +17,12 @@
 __pycache__/
 # Ignored by the build system
 /setup.cfg
+.circleci
+.githooks
+aquasec
+runtime.txt
+Readme.md
+.dockerignore
+Dockerfile
+Procfile
+.DS_Store
