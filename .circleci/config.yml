@@ -15,10 +15,20 @@ jobs:
     steps:
     - gcp-cli/install
     - gcp-cli/initialize
+    - setup_remote_docker
     - checkout
     - run:
-        name: Deploy with gcloud CLI
-        command: gcloud app deploy
+        name: Auth docker
+        command: gcloud auth configure-docker --quiet
+    - run:
+        name: Build image
+        command: docker build -t gcr.io/silent-snow-265406/shit-image .
+    - run:
+        name: Push image
+        command: docker push gcr.io/silent-snow-265406/shit-image
+    - run:
+        name: Deploy with image
+        command: gcloud app deploy --image-url=gcr.io/silent-snow-265406/shit-image --quiet
   build-image:
     executor: docker/docker
     steps:
