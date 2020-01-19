@@ -45,11 +45,64 @@
  - `App Eigine Admin API` need to be active
 
 ### Deploy to Heroku
-1. connect to this repo in circle ci
-2. add env `HEROKU_API_KEY` and `HEROKU_APP_NAME` for this project
-3. create project in heroku
-4. run cmd `heroku config:set DISABLE_COLLECTSTATIC=1 -a dso-demo`
-5. run pipeline in circle ci
+#### Deploy using source files
+1. add env `HEROKU_API_KEY` and `HEROKU_APP_NAME` in circleci
+    ```yaml
+    orbs:
+      heroku: circleci/heroku@0.0.10
+    ...
+    jobs:
+        ...
+    deploy:
+        docker:
+        - image: buildpack-deps:trusty
+        steps:
+        - checkout
+        - heroku/deploy-via-git
+    ```
 
+#### Deploy using docker image
+```yaml
+orbs:
+  heroku: circleci/heroku@0.0.10
+  docker: circleci/docker@0.5.20
 
+jobs:
+     build-image:
+        executor: docker/docker
+        steps:
+        - checkout
+        - setup_remote_docker
+        - run:
+            name: build docker image
+            command: docker build -t registry.heroku.com/dso-container-demo/web .
+        - run:
+            name: save docker image
+            command: docker save -o dso-image.tar registry.heroku.com/dso-container-demo/web:latest
+        - persist_to_workspace:
+            root: .
+            paths:
+            - ./dso-image.tar
+    ...
+    ...
+    deploy-DEV:
+        executor: docker/docker
+        steps:
+        - attach_workspace:
+            at: /tmp/workspace
+        - setup_remote_docker
+        - heroku/install
+        - run:
+            name: load local image
+            command: docker load -i /tmp/workspace/dso-image.tar
+        - run:
+            name: login heroku container
+            command: heroku container:login
+        - run:
+            name: docker push image
+            command: docker push registry.heroku.com/dso-container-demo/web
+        - run:
+            name: deploy with image
+            command: heroku container:release -a dso-container-demo web
+```
 
