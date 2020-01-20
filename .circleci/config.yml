@@ -22,13 +22,15 @@ jobs:
         command: gcloud auth configure-docker --quiet
     - run:
         name: Build image
-        command: docker build -t gcr.io/silent-snow-265406/dso-backend-image .
+        command: |
+          cd dso-service
+          docker build -t gcr.io/silent-snow-265406/dso-service-image .
     - run:
         name: Push image
-        command: docker push gcr.io/silent-snow-265406/dso-backend-image
+        command: docker push gcr.io/silent-snow-265406/dso-service-image
     - run:
         name: Deploy with image
-        command: gcloud app deploy --image-url=gcr.io/silent-snow-265406/dso-backend-image --quiet
+        command: gcloud app deploy --image-url=gcr.io/silent-snow-265406/dso-service-image --promote --quiet
   build-image:
     executor: docker/docker
     steps:

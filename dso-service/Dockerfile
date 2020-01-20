@@ -12,7 +12,7 @@ RUN virtualenv -p python3 /env
 ENV PATH /env/bin:$PATH
 
 # install dependencies
-COPY ./requirements.txt .
+COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy project

@@ -3,7 +3,7 @@
 *.pot
 *.pyc
 __pycache__
-db.sqlite3
+dso-service/db.sqlite3
 media
 
 # Backup files #
@@ -115,7 +115,7 @@ GitHub.sublime-settings
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
-/dso.iml
+/dso-service/dso.iml
 
 /aquasec/.DS_Store
 /ds/.DS_Store

@@ -24,6 +24,17 @@
     ```shell script
     gcloud app deploy
     ```
+*Multiple services deploy*
+For example, I want to deploy web and service in this project.
+For backend:
+```shell script
+gcloud app deploy dso-service/app.yaml --promote
+```
+For frontend:
+
+```shell script
+gcloud app deploy dso-web/app.yaml --promote
+```
 #### Deploy from circleci
 1. Orbs `gcp-cli: circleci/gcp-cli@1.8.3` is recommended:
     ```yaml
