@@ -31,7 +31,8 @@ jobs:
     - run:
         name: Deploy with image
         command: |
-          cd ..
+          pwd
+          cd dso-service
           gcloud app deploy --image-url=gcr.io/silent-snow-265406/dso-service-image --promote --quiet
   build-image:
     executor: docker/docker
