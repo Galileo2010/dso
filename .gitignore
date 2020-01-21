@@ -120,3 +120,8 @@ GitHub.sublime-settings
 /aquasec/.DS_Store
 /ds/.DS_Store
 
+
+*.idea
+*node_modules
+*package-lock.json
+*yarn-lock.json
